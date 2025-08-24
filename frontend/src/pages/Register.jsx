@@ -6,7 +6,7 @@ function Register() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // 👈 new state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -16,7 +16,7 @@ function Register() {
     try {
       let res = await post("/auth/register", { fullName, email, password });
       alert(res.message || "Registered successfully");
-      navigate("/login"); // 👈 correct way
+      navigate("/login"); 
     } catch (err) {
       alert("Something went wrong");
     } finally {
