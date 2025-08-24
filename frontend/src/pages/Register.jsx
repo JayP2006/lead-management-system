@@ -61,7 +61,7 @@ function Register() {
             className={`w-full py-2 rounded-md font-semibold text-white transition 
               ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
           >
-            {loading ? "Submitting..." : "Register"}
+            {loading ? "Please wait..." : "Register"}
           </button>
         </form>
       </div>
