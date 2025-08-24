@@ -7,7 +7,7 @@ exports.createLead = async (req, res) => {
 
     const lead = new Lead({
       ...req.body,
-      createdBy: req.user._id   // yahan crash hoga agar req.user undefined hai
+      createdBy: req.user.id   // yahan crash hoga agar req.user undefined hai
     });
 
     await lead.save();
