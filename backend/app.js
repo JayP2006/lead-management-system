@@ -11,8 +11,10 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: "https://lead-management-system-blond.vercel.app",
-    credentials: true
+     origin: "https://lead-management-system-blond.vercel.app",
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 
