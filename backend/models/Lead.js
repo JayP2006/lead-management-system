@@ -23,8 +23,7 @@ const leadSchema = new mongoose.Schema({
   is_qualified: { type: Boolean, default: false },
   createdBy: {   
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
+    ref: "User"
   }
 }, { timestamps: true });
 
