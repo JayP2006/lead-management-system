@@ -51,7 +51,7 @@ exports.getLead = async (req, res) => {
   try {
     const lead = await Lead.findOne({ 
       _id: req.params.id, 
-      createdBy: req.user._id   // 👈 sirf apna lead access
+      createdBy: req.user.id   // 👈 sirf apna lead access
     });
 
     if (!lead) return res.status(404).json({ message: "Not found" });
