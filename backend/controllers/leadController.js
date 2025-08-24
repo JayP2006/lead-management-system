@@ -2,16 +2,22 @@ const Lead = require("../models/Lead");
 
 exports.createLead = async (req, res) => {
   try {
+    console.log("REQ.USER >>>", req.user);   // check user aa raha ya nahi
+    console.log("REQ.BODY >>>", req.body);   // check frontend se kya data aa raha
+
     const lead = new Lead({
       ...req.body,
-      createdBy: req.user._id   
+      createdBy: req.user._id   // yahan crash hoga agar req.user undefined hai
     });
+
     await lead.save();
     res.status(201).json(lead);
   } catch (err) {
-    res.status(500).json({ message: "Error creating lead" });
+    console.error("ERROR in createLead >>>", err); // backend console me exact error milega
+    res.status(500).json({ message: "Error creating lead", error: err.message });
   }
 };
+
 
 
 exports.getLeads = async (req, res) => {
