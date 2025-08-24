@@ -1,14 +1,24 @@
-const API_URL = "https://lead-backend-3ij1.onrender.com"; 
+const API_URL = "https://lead-backend-3ij1.onrender.com";
+
+function getHeaders() {
+  let token = localStorage.getItem("token");
+  return token
+    ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+    : { "Content-Type": "application/json" };
+}
 
 export async function get(path) {
-  let res = await fetch(API_URL + path, { credentials: "include" });
+  let res = await fetch(API_URL + path, {
+    headers: getHeaders(),
+    credentials: "include",
+  });
   return res.json();
 }
 
 export async function post(path, body) {
   let res = await fetch(API_URL + path, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getHeaders(),
     credentials: "include",
     body: JSON.stringify(body),
   });
@@ -18,7 +28,7 @@ export async function post(path, body) {
 export async function put(path, body) {
   let res = await fetch(API_URL + path, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: getHeaders(),
     credentials: "include",
     body: JSON.stringify(body),
   });
@@ -28,6 +38,7 @@ export async function put(path, body) {
 export async function del(path) {
   let res = await fetch(API_URL + path, {
     method: "DELETE",
+    headers: getHeaders(),
     credentials: "include",
   });
   return res.json();
