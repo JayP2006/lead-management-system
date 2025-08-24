@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { post } from "../api";
+  import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  import { useNavigate } from "react-router-dom";
-
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
 const handleLogin = async (e) => {
   e.preventDefault();
