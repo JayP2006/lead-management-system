@@ -5,7 +5,11 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
+  import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate();
+
+const handleLogin = async (e) => {
   e.preventDefault();
   try {
     let res = await post("/auth/login", { email, password });
@@ -15,7 +19,7 @@ function Login() {
       localStorage.setItem("token", res.token);
       localStorage.setItem("user", JSON.stringify(res.user));
       alert("Login successful");
-      window.location.href = "/leads";
+      navigate("/leads"); 
     } else {
       alert(res.message || "Login failed");
     }
@@ -23,6 +27,7 @@ function Login() {
     alert("Something went wrong");
   }
 };
+
 
   return (
     <div className="flex items-center justify-center h-[calc(100vh-64px)] bg-gray-100">
