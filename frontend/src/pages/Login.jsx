@@ -1,31 +1,33 @@
 import React, { useState } from "react";
 import { post } from "../api";
-  import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // 👈 new state
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    let res = await post("/auth/login", { email, password });
-    console.log("result is ", res);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true); // 👈 disable button
 
-    if (res.token) {
-      localStorage.setItem("token", res.token);
-      localStorage.setItem("user", JSON.stringify(res.user));
-      alert("Login successful");
-      navigate("/leads"); 
-    } else {
-      alert(res.message || "Login failed");
+    try {
+      let res = await post("/auth/login", { email, password });
+      console.log("result is ", res);
+
+      if (res.token) {
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("user", JSON.stringify(res.user));
+        alert("Login successful");
+        window.location.href = "/leads";
+      } else {
+        alert(res.message || "Login failed");
+      }
+    } catch (err) {
+      alert("Something went wrong");
+    } finally {
+      setLoading(false); // 👈 enable button again
     }
-  } catch (err) {
-    alert("Something went wrong");
-  }
-};
-
+  };
 
   return (
     <div className="flex items-center justify-center h-[calc(100vh-64px)] bg-gray-100">
@@ -52,9 +54,11 @@ const handleLogin = async (e) => {
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700"
+            disabled={loading} // 👈 disable button when loading
+            className={`w-full py-2 rounded-md font-semibold text-white 
+              ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
           >
-            Login
+            {loading ? "Submitting..." : "Login"} {/* 👈 text change */}
           </button>
         </form>
       </div>
