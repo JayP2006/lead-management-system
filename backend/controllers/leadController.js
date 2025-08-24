@@ -1,9 +1,18 @@
 const Lead = require("../models/Lead");
 
 exports.createLead = async (req, res) => {
-  const lead = await Lead.create(req.body);
-  res.status(201).json(lead);
+  try {
+    const lead = new Lead({
+      ...req.body,
+      createdBy: req.user._id   
+    });
+    await lead.save();
+    res.status(201).json(lead);
+  } catch (err) {
+    res.status(500).json({ message: "Error creating lead" });
+  }
 };
+
 
 exports.getLeads = async (req, res) => {
   try {
@@ -13,10 +22,10 @@ exports.getLeads = async (req, res) => {
     let skip = (page - 1) * limit;
 
     
-    const total = await Lead.countDocuments();
-
-    
-    const leads = await Lead.find().skip(skip).limit(limit);
+    const total = await Lead.countDocuments({ createdBy: req.user._id });
+const leads = await Lead.find({ createdBy: req.user._id })
+  .skip(skip)
+  .limit(limit);
 
     res.json({
       data: leads,                      
@@ -33,18 +42,44 @@ exports.getLeads = async (req, res) => {
 
 
 exports.getLead = async (req, res) => {
-  const lead = await Lead.findById(req.params.id);
-  if (!lead) return res.status(404).json({ message: "Not found" });
-  res.json(lead);
+  try {
+    const lead = await Lead.findOne({ 
+      _id: req.params.id, 
+      createdBy: req.user._id   // 👈 sirf apna lead access
+    });
+
+    if (!lead) return res.status(404).json({ message: "Not found" });
+    res.json(lead);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching lead" });
+  }
 };
 
 exports.updateLead = async (req, res) => {
-  const lead = await Lead.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  if (!lead) return res.status(404).json({ message: "Not found" });
-  res.json(lead);
+  try {
+    const lead = await Lead.findOneAndUpdate(
+      { _id: req.params.id, createdBy: req.user._id }, // 👈 owner check
+      req.body,
+      { new: true }
+    );
+
+    if (!lead) return res.status(404).json({ message: "Not found" });
+    res.json(lead);
+  } catch (err) {
+    res.status(500).json({ message: "Error updating lead" });
+  }
 };
 
 exports.deleteLead = async (req, res) => {
-  await Lead.findByIdAndDelete(req.params.id);
-  res.json({ message: "Lead deleted" });
+  try {
+    const lead = await Lead.findOneAndDelete({ 
+      _id: req.params.id, 
+      createdBy: req.user._id   // 👈 owner check
+    });
+
+    if (!lead) return res.status(404).json({ message: "Not found" });
+    res.json({ message: "Lead deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting lead" });
+  }
 };
