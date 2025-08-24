@@ -1,7 +1,7 @@
 const API_URL = "https://lead-backend-3ij1.onrender.com"; 
 
 export async function get(path) {
-  let res = await fetch(API_URL + path, { credentials: "include",headers: { "Content-Type": "application/json" } });
+  let res = await fetch(API_URL + path, { credentials: "include" });
   return res.json();
 }
 
