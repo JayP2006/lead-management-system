@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000"; // backend url
+const API_URL = "https://lead-backend-3ij1.onrender.com"; // backend url
 
 export async function get(path) {
   let res = await fetch(API_URL + path, { credentials: "include" });
