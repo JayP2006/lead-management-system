@@ -1,17 +1,27 @@
 import React, { useState } from "react";
 import { post } from "../api";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // 👈 new state
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    let res = await post("/auth/register", { fullName, email, password });
-    alert(res.message || "Registered successfully");
-    redirect("/login");
+    setLoading(true);
+
+    try {
+      let res = await post("/auth/register", { fullName, email, password });
+      alert(res.message || "Registered successfully");
+      navigate("/login"); // 👈 correct way
+    } catch (err) {
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,9 +57,11 @@ function Register() {
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition"
+            disabled={loading}
+            className={`w-full py-2 rounded-md font-semibold text-white transition 
+              ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
           >
-            Register
+            {loading ? "Submitting..." : "Register"}
           </button>
         </form>
       </div>
