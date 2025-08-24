@@ -2,18 +2,18 @@ const Lead = require("../models/Lead");
 
 exports.createLead = async (req, res) => {
   try {
-    console.log("REQ.USER >>>", req.user);   // check user aa raha ya nahi
-    console.log("REQ.BODY >>>", req.body);   // check frontend se kya data aa raha
+    console.log("REQ.USER >>>", req.user);   
+    console.log("REQ.BODY >>>", req.body);   
 
     const lead = new Lead({
       ...req.body,
-      createdBy: req.user.id   // yahan crash hoga agar req.user undefined hai
+      createdBy: req.user.id   
     });
 
     await lead.save();
     res.status(201).json(lead);
   } catch (err) {
-    console.error("ERROR in createLead >>>", err); // backend console me exact error milega
+    console.error("ERROR in createLead >>>", err); 
     res.status(500).json({ message: "Error creating lead", error: err.message });
   }
 };
@@ -51,7 +51,7 @@ exports.getLead = async (req, res) => {
   try {
     const lead = await Lead.findOne({ 
       _id: req.params.id, 
-      createdBy: req.user.id   // 👈 sirf apna lead access
+      createdBy: req.user.id   
     });
 
     if (!lead) return res.status(404).json({ message: "Not found" });
@@ -64,7 +64,7 @@ exports.getLead = async (req, res) => {
 exports.updateLead = async (req, res) => {
   try {
     const lead = await Lead.findOneAndUpdate(
-      { _id: req.params.id, createdBy: req.user.id }, // 👈 owner check
+      { _id: req.params.id, createdBy: req.user.id },
       req.body,
       { new: true }
     );
@@ -80,7 +80,7 @@ exports.deleteLead = async (req, res) => {
   try {
     const lead = await Lead.findOneAndDelete({ 
       _id: req.params.id, 
-      createdBy: req.user.id   // 👈 owner check
+      createdBy: req.user.id   
     });
 
     if (!lead) return res.status(404).json({ message: "Not found" });
