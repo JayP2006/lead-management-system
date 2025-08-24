@@ -28,8 +28,8 @@ exports.getLeads = async (req, res) => {
     let skip = (page - 1) * limit;
 
     
-    const total = await Lead.countDocuments({ createdBy: req.user._id });
-const leads = await Lead.find({ createdBy: req.user._id })
+    const total = await Lead.countDocuments({ createdBy: req.user.id });
+const leads = await Lead.find({ createdBy: req.user.id })
   .skip(skip)
   .limit(limit);
 
@@ -64,7 +64,7 @@ exports.getLead = async (req, res) => {
 exports.updateLead = async (req, res) => {
   try {
     const lead = await Lead.findOneAndUpdate(
-      { _id: req.params.id, createdBy: req.user._id }, // 👈 owner check
+      { _id: req.params.id, createdBy: req.user.id }, // 👈 owner check
       req.body,
       { new: true }
     );
@@ -80,7 +80,7 @@ exports.deleteLead = async (req, res) => {
   try {
     const lead = await Lead.findOneAndDelete({ 
       _id: req.params.id, 
-      createdBy: req.user._id   // 👈 owner check
+      createdBy: req.user.id   // 👈 owner check
     });
 
     if (!lead) return res.status(404).json({ message: "Not found" });
