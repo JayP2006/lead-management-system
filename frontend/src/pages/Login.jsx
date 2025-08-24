@@ -4,11 +4,11 @@ import { post } from "../api";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // 👈 new state
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true); // 👈 disable button
+    setLoading(true);
 
     try {
       let res = await post("/auth/login", { email, password });
@@ -25,7 +25,7 @@ function Login() {
     } catch (err) {
       alert("Something went wrong");
     } finally {
-      setLoading(false); // 👈 enable button again
+      setLoading(false); 
     }
   };
 
@@ -54,11 +54,11 @@ function Login() {
           />
           <button
             type="submit"
-            disabled={loading} // 👈 disable button when loading
+            disabled={loading} 
             className={`w-full py-2 rounded-md font-semibold text-white 
               ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
           >
-            {loading ? "Submitting..." : "Login"} {/* 👈 text change */}
+            {loading ? "Please wait..." : "Login"} 
           </button>
         </form>
       </div>
