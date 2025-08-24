@@ -24,6 +24,7 @@ function LeadForm() {
 
   useEffect(() => {
     if (id) {
+      console.log(id);
       get(`/leads/${id}`).then((data) => setLead(data));
     }
   }, [id]);
